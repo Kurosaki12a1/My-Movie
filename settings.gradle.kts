@@ -31,3 +31,7 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":shared")
 include(":navigation")
+include(":firebase")
+include(":auth")
+include(":auth:auth-core")
+include(":auth:auth-google")

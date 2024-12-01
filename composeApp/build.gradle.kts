@@ -33,10 +33,10 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
-       //     implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(projects.navigation)
+
             implementation(projects.shared)
             implementation(compose.runtime)
             implementation(compose.foundation)

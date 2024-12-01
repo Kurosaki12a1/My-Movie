@@ -34,3 +34,4 @@ google-services.json
 
 .kotlin
 .fleet
+iosApp/GoogleService-Info.plist

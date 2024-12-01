@@ -2,9 +2,10 @@ package com.kmp.app.shared.viewmodel.auth
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import com.kmp.app.shared.usecase.auth.AuthUseCase
 import com.kmp.app.shared.viewmodel.BaseViewModel
 
-class ForgetPasswordViewModel : BaseViewModel() {
+class ForgetPasswordViewModel(private val authUseCase: AuthUseCase) : BaseViewModel() {
 
     private val _email = mutableStateOf("")
     val email: State<String> = _email

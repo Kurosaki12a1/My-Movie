@@ -29,6 +29,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.firebase)
+            implementation(projects.auth.authGoogle)
+
+            // Firebase
+            implementation(libs.firebase.auth)
+
             implementation(projects.navigation)
             implementation(libs.koin.core)
             implementation(libs.koin.composeVM)
