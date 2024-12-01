@@ -20,7 +20,7 @@ sealed class Destination {
 
     @Serializable
     @SerialName("ForgetPassword")
-    data object ForgetPassword : Destination()
+    data class ForgetPassword(val email: String? = "") : Destination()
 
     @Serializable
     @SerialName("Home")
@@ -36,10 +36,10 @@ sealed class Destination {
 
     @Serializable
     @SerialName("Bookmark")
-    data object Bookmark: Destination()
+    data object Bookmark : Destination()
 
     @Serializable
     @SerialName("Settings")
-    data object Settings: Destination()
+    data object Settings : Destination()
 
 }

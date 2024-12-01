@@ -30,7 +30,10 @@ import androidx.navigation.compose.rememberNavController
 import com.kmp.app.movie.common.Dark
 import com.kmp.app.movie.common.Gold
 import com.kmp.app.movie.common.LightGray
+import com.kmp.app.movie.common.LightGray2
+import com.kmp.app.movie.common.PinkLight
 import com.kmp.app.movie.common.VeryLightGray
+import com.kmp.app.movie.common.YellowPastel
 import com.kmp.app.movie.model.getListBottomBar
 import com.kmp.app.movie.model.isBottomBarVisible
 import com.kmp.app.movie.navigation.MainNavGraph
@@ -57,7 +60,7 @@ fun MainScreen(
     )
 
     Scaffold(
-        containerColor = VeryLightGray,
+        containerColor = LightGray2,
         topBar = {
 
         },

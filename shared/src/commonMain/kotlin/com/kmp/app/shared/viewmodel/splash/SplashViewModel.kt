@@ -16,7 +16,7 @@ class SplashViewModel : BaseViewModel() {
         viewModelScope.launch {
             delay(DELAY)
             navigateTo(
-                route = Destination.Home,
+                route = Destination.SignIn,
                 popUpToRoute = Destination.Splash,
                 inclusive = true,
                 isSingleTop = true

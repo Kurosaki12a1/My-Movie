@@ -1,7 +1,6 @@
 package com.kmp.app.movie.screen.splash
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,8 +18,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kmp.app.movie.common.Dark
-import com.kmp.app.movie.common.Gold
+import com.kmp.app.movie.common.Teal
 import com.kmp.app.shared.viewmodel.splash.SplashViewModel
 import mymovie.composeapp.generated.resources.Res
 import mymovie.composeapp.generated.resources.app_name
@@ -36,9 +34,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = koinViewModel()
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
-            .background(Dark),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -49,12 +45,12 @@ fun SplashScreen(
                 modifier = Modifier.size(100.dp),
                 painter = painterResource(Res.drawable.ic_outline_movie),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(Gold)
+                colorFilter = ColorFilter.tint(Teal)
             )
             Spacer(Modifier.width(16.dp))
             Text(
                 text = stringResource(Res.string.app_name),
-                color = Gold,
+                color = Teal,
                 fontSize = 60.sp,
                 fontFamily = FontFamily(Font(Res.font.urbanist_bold)),
                 fontWeight = FontWeight.Bold
