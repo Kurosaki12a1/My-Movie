@@ -30,7 +30,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.firebase)
-            implementation(projects.auth.authGoogle)
+            api(projects.auth.authGoogle)
 
             // Firebase
             implementation(libs.firebase.auth)

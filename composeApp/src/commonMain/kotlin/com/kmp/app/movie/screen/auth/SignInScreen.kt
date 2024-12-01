@@ -1,5 +1,8 @@
 package com.kmp.app.movie.screen.auth
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,13 +22,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,9 +48,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kmp.app.auth_google.GoogleButtonUiContainer
+import com.kmp.app.auth_google.GoogleUser
 import com.kmp.app.movie.common.DarkGray
 import com.kmp.app.movie.common.Gray
-import com.kmp.app.movie.common.GrayBorder
+import com.kmp.app.movie.common.LightGray2
 import com.kmp.app.movie.common.Teal
 import com.kmp.app.movie.extension.isEmailValid
 import com.kmp.app.movie.extension.isPasswordValid
@@ -54,7 +64,7 @@ import mymovie.composeapp.generated.resources.don_t_have_an_account
 import mymovie.composeapp.generated.resources.email
 import mymovie.composeapp.generated.resources.email_icon
 import mymovie.composeapp.generated.resources.forget_password
-import mymovie.composeapp.generated.resources.googleg_standard_color_18
+import mymovie.composeapp.generated.resources.ic_gg_btn
 import mymovie.composeapp.generated.resources.ic_hide_password
 import mymovie.composeapp.generated.resources.ic_outline_movie
 import mymovie.composeapp.generated.resources.ic_show_password
@@ -62,11 +72,13 @@ import mymovie.composeapp.generated.resources.lock_icon
 import mymovie.composeapp.generated.resources.login_to_your_account
 import mymovie.composeapp.generated.resources.or_continue_with
 import mymovie.composeapp.generated.resources.password
+import mymovie.composeapp.generated.resources.please_wait
 import mymovie.composeapp.generated.resources.sign_in
 import mymovie.composeapp.generated.resources.sign_in_with_google
 import mymovie.composeapp.generated.resources.sign_up
 import mymovie.composeapp.generated.resources.urbanist_bold
 import org.jetbrains.compose.resources.Font
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -153,8 +165,7 @@ fun SignInScreen(
                             tint = Color.Red
                         )
                     }
-                }
-            )
+                })
             OutlinedTextField(modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = DarkGray, unfocusedTextColor = DarkGray
@@ -193,8 +204,7 @@ fun SignInScreen(
                             color = Color.Red
                         )
                     }
-                }
-            )
+                })
         }
         item {
             Box(
@@ -231,22 +241,14 @@ fun SignInScreen(
             Box(
                 modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
             ) {
-                Row(modifier = Modifier.clip(RoundedCornerShape(8.dp))
-                    .border(1.dp, GrayBorder, RoundedCornerShape(8.dp)).clickable { }
-                    .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(Res.drawable.googleg_standard_color_18),
-                        contentDescription = stringResource(Res.string.sign_in_with_google)
-                    )
-                    Text(
-                        text = stringResource(Res.string.sign_in_with_google),
-                        fontWeight = FontWeight.Bold,
-                        color = Gray
-                    )
-                }
+                GoogleButtonContainer(signedInState = false,
+                    loadingState = false,
+                    onButtonClicked = {
+                        // TODO
+                    },
+                    onResult = {
+
+                    })
             }
         }
         item {
@@ -289,6 +291,77 @@ fun SignInScreen(
                     text = stringResource(Res.string.forget_password),
                     fontWeight = FontWeight.Bold,
                     color = Color.Red
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun GoogleButtonContainer(
+    signedInState: Boolean,
+    loadingState: Boolean,
+    onButtonClicked: () -> Unit,
+    onResult: (GoogleUser?) -> Unit
+) {
+    GoogleButtonUiContainer(onGoogleSignInResult = {
+        onResult(it)
+    }) {
+        GoogleButton(loadingState = signedInState || loadingState,
+            onClick = { onButtonClicked.invoke() })
+
+        LaunchedEffect(signedInState) {
+            if (signedInState) {
+                this@GoogleButtonUiContainer.onClick()
+            }
+        }
+    }
+}
+
+@Composable
+private fun GoogleButton(
+    modifier: Modifier = Modifier, loadingState: Boolean = false, onClick: () -> Unit
+) {
+    val buttonText = remember { mutableStateOf("") }
+    LaunchedEffect(loadingState) {
+        if (loadingState) {
+            buttonText.value = getString(Res.string.please_wait)
+        } else {
+            buttonText.value = getString(Res.string.sign_in_with_google)
+        }
+    }
+
+    Surface(
+        modifier = Modifier.border(
+            width = 1.dp, shape = RoundedCornerShape(16.dp), color = DarkGray
+        ),
+        shape = RoundedCornerShape(16.dp),
+        color = LightGray2,
+    ) {
+        Row(modifier = modifier.clickable(enabled = !loadingState) { onClick.invoke() }.padding(
+                start = 12.dp, end = 16.dp, top = 12.dp, bottom = 12.dp
+            ).animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300, easing = LinearOutSlowInEasing
+                )
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center) {
+            Image(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(Res.drawable.ic_gg_btn),
+                contentDescription = "Google Logo"
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = buttonText.value,
+                fontFamily = FontFamily(Font(Res.font.urbanist_bold)),
+                color = Gray
+            )
+            if (loadingState) {
+                Spacer(modifier = Modifier.width(16.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = Color.Blue
                 )
             }
         }
